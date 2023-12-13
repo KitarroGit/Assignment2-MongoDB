@@ -12,20 +12,24 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/dressStore', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://127.0.0.1:27017/DressStore')
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
 // Register the product and category routes
 app.use('/api/products', productRoutes);
-// Uncomment the next line if you have implemented category routes
-// app.use('/api/categories', categoriesRouter);
 
 // Root Endpoint
 app.get('/', (req, res) => {
   res.send('Welcome to the Dress Store API!');
 });
 
+app.get('/test', (req, res) => {
+    res.send('Test route is working');
+  });
+
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+mongoose.set('debug', true);

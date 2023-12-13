@@ -1,14 +1,17 @@
 const Product = require('../models/Product');
 
-// Get all products
-exports.getAllProducts = async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
+exports.getProducts = async (req, res) => {
+    console.log('Fetching products...');
+    try {
+      const query = req.query.name ? { name: new RegExp(req.query.name, 'i') } : {};
+      const products = await Product.find(query);
+      console.log('Products fetched:', products); // Log the result
+      res.json(products);
+    } catch (err) {
+      console.error('Error fetching products:', err); // Log any errors
+      res.status(500).send(err.message);
+    }
+  };
 
 // Get product by ID
 exports.getProductById = async (req, res) => {
@@ -59,16 +62,6 @@ exports.deleteAllProducts = async (req, res) => {
   try {
     await Product.deleteMany({});
     res.send('All products deleted');
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
-
-// Find products by name
-exports.findProductsByName = async (req, res) => {
-  try {
-    const products = await Product.find({ name: new RegExp(req.query.name, 'i') });
-    res.json(products);
   } catch (err) {
     res.status(500).send(err.message);
   }
